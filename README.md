@@ -1,8 +1,8 @@
 
-# Formalization of Type Theory in Agda
+# Formalization of (Simple) Type Theory in Agda
 
 ## Structure
-These directories contain the code and text of my bachelor thesis.
+These directories contain the code and text of my [bachelor thesis](https://www.thi.uni-hannover.de/fileadmin/thi/abschlussarbeiten/urschumzew-ba.pdf).
 For the sake of completeness, all neccessary files for generating a
 pdf are also included.
 
