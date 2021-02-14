@@ -1,0 +1,192 @@
+
+
+Type theory was first introduced by Russell in 1903 \citep{kamareddine2002} as
+part of Russell and Whitehead's efforts of writing the \textit{Principia
+  Mathematica}, where its role was to serve as a safe, but still powerful basis for formalizing mathematics -
+escaping the paradoxes of set theory, such as, ``Does the set of all sets, which do not
+contain themselves, contain itself?'' (Russell's paradox). \citep{ConstableManuscript}
+
+\medskip
+
+It is closely related to intuitionistic (constructive) mathematics, a branch of
+mathematics where proofs are meant to be constructive. Here, a proof of the existence
+of some object must give us a way to explicitly construct such an object. In
+practice, this means that axioms which allow us to circumvent explicit
+constructions, like the principle of excluded middle, are rejected. In the early
+1930s, Brouwer, Heyting and Kolmogorov gave a computational interpretation of
+intuitionistic logic. The discovered principle is known as ``Propositions as
+Types'' or ``Curry-Howard Isomorphism'', the idea is to interpret a proposition
+as a type, and a proof of it as an algorithm, stated in the lambda calculus, having this type.
+
+Considering the computational aspect as being crucial, Bishop developed analysis in a
+constructive setting (1967). Inspired by this, different type theories were
+developed to provide a system in which Bishop's mathematics could be
+formalized. These type theories form the basis of modern proof assistants,
+including Agda (Intuitionistic Type Theory, \citep{ITT}) and Coq
+(Calculus of Inductive Constructions, \citep{CIC}). \citep{ConstableManuscript}
+
+\medskip
+
+In 1945, Eilenberg and MacLane introduced category theory, first as a tool for
+applying algebraic methods to a topological problem. Over time, it developed
+into a language which could be used to describe the objects of many different
+branches of mathematics and faciliated the discovery of connections between
+them. Starting in the 1960s, Lawvere and others explored the idea of applying
+category theory to the basis of math itself: logic and set theory.
+This endeavour resulted in the definition of a topos, a special kind of
+category, which has an internal logic rich enough to serve as a generalized
+foundational framework. \citep{LandryMarquis}
+
+\medskip
+
+Furthermore, a direct connection to type theory became apparent, where
+categories can be seen as providing the semantics for type theories.
+Thus summarizing, the relationships between mathematics, type theory and category theory can be
+stated as follows \citep{Trinity}:
+
+\begin{center}
+\begin{tikzcd}[math mode=false, row sep=huge, column sep=tiny]
+  &
+  mathematics
+    \ar[dl, swap, "\textit{can be formalized in a}"]
+    \ar[dr, "\textit{can be internalized in a}"]
+    &
+    \\
+    \begin{tabular}{c}
+      type theory \\
+      (syntax)
+    \end{tabular}
+    \ar[rr, swap, align=center, "\textit{can be} \\ \textit{interpreted in a}"]
+    &
+    &
+    \begin{tabular}{c}
+      category \\
+      (semantics)
+    \end{tabular}
+\end{tikzcd}
+\end{center}
+
+As part of research by Awodey, Warren and Voevodsky around 2006, Homotopy Type
+Theory (HoTT) was developed. In homotopy theory (without \textit{-Type-}), topological spaces are studied
+with respect to what paths can be constructed. This includes an infinite
+hierarchy of paths: between points, between paths between points, between paths
+between paths between points, and so on. Thus HoTT, being a type theory which has an
+interpretation in Kan simplicial sets (a category studied in homotopy
+theory), mirrors these features and offers new ways for doing mathematics in
+it \citep{HoTTBook}:
+\begin{enumerate}
+\item A proof of equality $a = b$ is interpreted as a path between $a$ and $b$.
+  In homotopical fashion, such a proof is thus no longer unique: there may be
+  different paths between $a$ and $b$. And since such paths may be compared
+  again and again, an infinite path structure emerges.
+\item HoTT contains a new axiom: the univalence axiom. It says that 
+  isomorphic structures may be treated as being equal:
+  \[
+    (A \simeq B) \simeq (A = B)
+  \]
+  Such a statement is not consistent with set theory, but it can be assumed in HoTT,
+  allowing us to treat isomorphic structures more intuitively. 
+\end{enumerate}
+
+\medskip
+
+Nevertheless, the univalence axiom is only an axiom in HoTT, i.e., it has no
+computational meaning - code which uses it cannot be executed. This lead
+to the development of Cubical Type Theory (CTT), which, by modelling equality \textit{explicitly}
+by paths, succeeded in giving computational meaning to the univalence axiom
+\citep{CubicalTT}.
+
+\medskip
+
+While the development is still in progress (for example, CTT currently has no
+interpretation in as general a class of categories as HoTT has \citep{ShulmanCTT}),
+the state of research can be visualized as follows \citep{Trinity}:
+
+\begin{center}
+\begin{tikzcd}[math mode=false, row sep=huge, column sep=tiny]
+                     & homotopical mathematics \ar[dl, swap, "\textit{can be formalized
+                       in}"] \ar[dr, "\textit{can be internalized in}"] & \\
+  HoTT / CTT \ar[rr, swap, align=center, "\textit{can be} \\
+  \textit{interpreted in}"] & & higher categories
+\end{tikzcd}
+\end{center}
+
+\medskip
+
+The goal of this thesis is the exploration of the relationship between type
+theory and category theory, albeit on a much smaller scale: Our topic is the
+simply typed lambda calculus and its interpretation into a cartesian closed
+category (CCC):
+
+\begin{center}
+\begin{tikzcd}[math mode=false, row sep=huge, column sep=tiny]
+                     & (Propositional Logic) \ar[dl, dashed] \ar[dr, dashed] & \\
+  ST. $λ$-Calc \ar[rr, swap, align=center, "\textit{can be} \\
+  \textit{interpreted in a}"] & & CCC
+\end{tikzcd}
+\end{center}
+
+In order to present this connection, we formalize it in Cubical Type Theory, as
+implemented in the Agda proof assistant. This allows us to take advantage of a
+computing functional extensionality (a corrollary of univalence, does not
+compute in other type theories). Because of this, some practical aspects of formalizing
+mathematics in a (cubical) type theory are also touched upon in this thesis.
+
+\section*{Motivation}
+My motivation comes from the praxis of software development. Sometimes, when
+programming, I would like to have a tool which could provide a higher level
+view on code: To see the whole
+structure of a program at once, to see which components exist and how they
+interact. Especially, this would make it easier to explore and navigate large codebases.
+
+But it should be more than a mere visualization of the code. It should be an
+interactive representation equivalent to it, such that it would
+become possible to program on a higher level - graphically managing the
+connections between lower level components. Also it should be possible to zoom
+in and out arbitrarily, enabling the programmer to work on different abstraction
+levels.
+
+\medskip
+
+I would like to work towards this vision, and the deep connection between
+programming (type theory) and category theory seems to be a promising tool.
+Particularly, because category theory makes extensive use of visualizations (in
+the form of diagrams), while also being a natural framework for repeated
+abstractions.
+
+Furthermore, realizing this vision would involve writing an interpreter, and in
+order to eliminate errors, it should be written in a language with a strong typing
+system. 
+
+\medskip
+
+Therefore, I take this thesis as an opportunity to combine both aspects: By
+formalizing in Agda, I can implement an interpreter and formally verify its
+correctness, and then continue by exploring the connection between programming
+and category theory.
+
+
+\section*{Structure}
+The following chapters are structured as follows: In chapter 2, Agda and its
+syntax are introduced as an example of working in a type theory. In chapter 3,
+some types which occur frequently are presented. In chapter 4, category theory
+is introduced and is developed far enough for the definition of a cartesian
+closed category. In chapter 5, the simply typed lambda calculus is introduced.
+This involves the definition of a typechecker, context weakening and
+substitution, as well as proofs about their behaviour. Furthermore,
+$β$-reduction is defined, and normalization of well typed terms is proven.
+Finally, in chapter 6, the interpretation of well typed terms in a CCC is given
+and proven to be sound with respect to $β$-reduction.
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,62 @@
+
+This shows how an implementation of $\lamto$ and its interpretation into a CCC
+can be formalized in Agda.
+
+\medskip
+
+Nevertheless, some aspects of the code are not entirely satisfactory:
+\begin{itemize}
+\item
+The definitions of finite types and finite lists are problematic. Their encoding
+was chosen to fit the problems encountered early on. But in chapter
+\ref{ch:interpretation}, this resulted in many correction arrows having to be
+added, making theorems and proofs needlessly more complex. Also, because of how
+these arrows are defined, the interpretation function for judgements does not
+compute.
+
+These problems could have been avoided with a recursive definition of
+lists - but this in turn would produce its own set of problems, presumably
+around the definition of weakening, since there, arbitrary indices into a list
+have to be dealt with.
+
+Such a conflict arises because a single definition is used everywhere, and it
+could be solvable if different definitions which fundamentally describe the
+same object could be used interchangebly.
+
+Fortunately, this seems to be exactly what the concept of univalence provides and it would
+be interesting to see how it can be applied here.
+
+\item
+  The code was only written with focus on correctness, not on performance.
+  Because of this, evaluating the $β$-equality of simple terms may
+  sometimes take multiple minutes, while using several gigabytes of memory.
+
+  Since this evaluation is done as part of typechecking a file, using the CTT
+  normalization of Agda, it is not immediately clear what the reason for
+  such performance problems could be.
+
+  Still, before any practical usage can happen, this direction has to be
+  explored as well.
+\end{itemize}
+
+\medskip
+
+Concerning the goal of visualizing programs, this exploration of the
+semantics of $\lamto$ reinforces the idea that category theory and diagrams
+should be useful tools: it is natural to think about computations as morphisms
+from a context to their result type.
+
+But it also raises questions: Arrows have
+no clear representation. As encoded by the very concept of a commutating
+diagram, the same computation could be visualized using different combinations
+of arrows. This indicates that there is no canonical way to represent a program
+diagrammatically, while at the same time, it could be possible to leverage this
+fact for zooming in and out of a representation.
+
+\medskip
+
+Finally, $\lamto$ is a very simple type theory, missing many of the
+constructions found in real world programming languages (sum types, general data
+types, dependent types). Because of this, the next natural step would be to
+extend it with these concepts, while also moving to appropriate categories,
+where the corresponding semantics can be formulated.

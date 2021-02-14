@@ -1,0 +1,319 @@
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                      %%%%%%%%%
+%%%%% Formalization of Type Theory in Agda %%%%%%%%%
+%%%%%                                      %%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\documentclass[
+% draft,
+fontsize=11pt,
+twoside
+]{scrreprt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting
+\usepackage{geometry}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mathematics
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{tikz-cd}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Theorem environments
+\usepackage{amsthm}
+\usepackage{thmtools}
+
+% theorem like
+\declaretheorem[
+  style=plain,
+  parent=chapter
+]{theorem}
+
+\declaretheorem[
+  style=plain,
+  sibling=theorem
+]{lemma}
+
+\declaretheorem[
+  style=plain,
+  sibling=theorem
+]{corollary}
+
+
+% definition like
+\declaretheoremstyle[
+  spaceabove=6pt, spacebelow=6pt,
+  headfont=\normalfont\bfseries,
+  notefont=\mdseries, notebraces={(}{)},
+  bodyfont=\normalfont,
+  postheadspace=1em,
+  qed=$\lhd$
+]{mystyle}
+
+\declaretheorem[
+  style=mystyle,
+  sibling=theorem
+]{definition}
+
+
+\declaretheorem[
+  style=definition,
+  sibling=theorem
+]{example}
+
+
+% remark like
+\declaretheorem[
+  style=remark,
+  numbered=no
+]{remark}
+
+\declaretheorem[
+  style=remark,
+  numbered=no
+]{notation}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Agda
+\usepackage[amakuri]{agda}
+% \usepackage[bw]{agda}
+
+% The following packages are needed because unicode
+% is translated (using the next set of packages) to
+% latex commands. You may need more packages if you
+% use more unicode characters:
+
+% \usepackage{amssymb}
+% \usepackage{bbm}
+\usepackage[greek,english]{babel}
+% \usepackage[english]{babel}
+
+% This handles the translation of unicode to latex:
+
+% \usepackage{ucs}
+% \usepackage[utf8x]{inputenc}
+
+% \usepackage{autofe}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Declare unicode character for xelatex:
+%
+% from
+%
+% https://tex.stackexchange.com/questions/195458/implementing-declareunicodecharacter-in-lualatex-an-xelatex?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+\usepackage{fontspec}
+\usepackage{newunicodechar}
+
+\newunicodechar{𝒰}{\ensuremath{\mathcal{U}}}
+\newunicodechar{ᵢ}{\ensuremath{_i}}
+\newunicodechar{₀}{\ensuremath{_0}}
+\newunicodechar{₁}{\ensuremath{_1}}
+\newunicodechar{₂}{\ensuremath{_2}}
+\newunicodechar{₃}{\ensuremath{_3}}
+\newunicodechar{₄}{\ensuremath{_4}}
+\newunicodechar{₅}{\ensuremath{_5}}
+\newunicodechar{ℕ}{\ensuremath{\mathbb{N}}}
+\newunicodechar{ℝ}{\ensuremath{\mathbb{R}}}
+\newunicodechar{⊤}{\ensuremath{\top}}
+\newunicodechar{⊥}{\ensuremath{\bot}}
+\newunicodechar{∧}{\ensuremath{\land}}
+\newunicodechar{◇}{\ensuremath{\diamond}}
+\newunicodechar{◆}{\ensuremath{\vardiamondsuit}}
+\newunicodechar{⍛}{\ensuremath{\underline{\circ}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% C code
+\usepackage[final]{listings}
+\usepackage{scrhack}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% natural deduction
+\usepackage{ebproof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Agda styles
+% \newcommand{\AD}{\AgdaDatatype}
+% \newcommand{\AIC}{\AgdaInductiveConstructor}
+% \newcommand{\AF}{\AgdaFunction}
+% \newcommand{\AFd}{\AgdaField}
+% \newcommand{\AP}{\AgdaPostulate}
+% \newcommand{\AR}{\AgdaRecord}
+% \newcommand{\AK}{\AgdaKeyword}
+% \newcommand{\AB}[1]{\AgdaBound{#1}}
+
+% without color
+\newcommand{\AD}[1]{\text{\AgdaNoSpaceMath{\AgdaFontStyle{#1}}}}
+\newcommand{\AIC}[1]{\text{\AgdaNoSpaceMath{\AgdaFontStyle{#1}}}}
+\newcommand{\AF}[1]{\text{\AgdaNoSpaceMath{\AgdaFontStyle{#1}}}}
+\newcommand{\AFd}[1]{\text{\AgdaNoSpaceMath{\AgdaFontStyle{#1}}}}
+% \newcommand{\AP}{\AgdaPostulate}
+\newcommand{\AR}[1]{\text{\AgdaNoSpaceMath{\AgdaFontStyle{#1}}}}
+\newcommand{\AK}[1]{\text{\AgdaNoSpaceMath{\AgdaKeyword{#1}}}}
+\newcommand{\AB}[1]{\text{\AgdaNoSpaceMath{\AgdaBoundFontStyle{#1}}}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Misc packages
+\usepackage{enumerate}
+\usepackage{scalerel}
+\usepackage[numbers]{natbib}
+\usepackage[final,hidelinks]{hyperref}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom symbols
+\newcommand*{\defeq}{\mathrel{\vcenter{\baselineskip0.8ex \lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}}%
+                     \scaleobj{0.9}{\equiv}}}
+
+\newcommand*{\lamto}{\ensuremath{λ\!\!\to}}
+
+\newcommand*{\CC}[1]{\AF{C⟦}\,#1\,\AF{⟧}}
+\newcommand*{\TT}[1]{\AF{T⟦}\,#1\,\AF{⟧}}
+\newcommand*{\JJ}[1]{\AF{J⟦}\,#1\,\AF{⟧}}
+\newcommand*{\MM}[1]{\AF{M⟦}\,#1\,\AF{⟧}}
+\newcommand*{\TTeq}[1]{\AF{T=⟦}\,#1\,\AF{⟧}}
+\newcommand*{\CCeq}[1]{\AF{C=⟦}\,#1\,\AF{⟧}}
+\newcommand*{\OOeq}[1]{\AF{O=⟦}\,#1\,\AF{⟧}}
+\newcommand*{\ehat}{\:\widehat{\ }\:}
+\newcommand*{\fexp}[2]{{#1}^{#2}}
+
+\newcommand\NoIndent[1]{%
+  \begingroup
+  \par
+  \parshape0
+  #1\par
+  \endgroup
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% BEGIN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Formalization of Type Theory in Agda}
+
+\author{Maxim Urschumzew}
+
+\date{2018-08-13}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting
+%
+%
+% vertical space
+\setlength\abovedisplayskip{6pt}
+\setlength\belowdisplayskip{6pt}
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The text
+%
+% \maketitle
+\include{0-title}
+
+
+
+
+
+\tableofcontents
+
+
+\chapter{Introduction}
+\input{1-introduction}
+
+\chapter{Formalization in Agda}
+\input{../Build/Post/Source/TypeTheory/Lambda/Introduction/Introduction}
+
+\chapter{Basic constructs}
+\input{../Build/Post/Source/TypeTheory/Lambda/Base/Fin}
+\input{../Build/Post/Source/TypeTheory/Lambda/Base/FList}
+\input{../Build/Post/Source/TypeTheory/Lambda/Base/Either}
+\input{../Build/Post/Source/TypeTheory/Lambda/Base/Fir}
+
+\chapter{Category theory}
+\input{../Build/Post/Source/TypeTheory/Lambda/Base/Category}
+\input{../Build/Post/Source/TypeTheory/Lambda/Base/CCC}
+\input{../Build/Post/Source/TypeTheory/Lambda/Base/CCCid}
+\input{../Build/Post/Source/TypeTheory/Lambda/Base/CCCProofs}
+
+\chapter{Simply typed $λ$-calculus}
+\input{5-lambda-calc}
+\section{Parametrization}
+\input{../Build/Post/Source/TypeTheory/Lambda/Param}
+
+\section{Types}
+\input{../Build/Post/Source/TypeTheory/Lambda/Core/Type}
+\section{Terms}
+\input{../Build/Post/Source/TypeTheory/Lambda/Core/Term}
+\input{../Build/Post/Source/TypeTheory/Lambda/Core/TermProofs}
+
+\section{The typechecker}
+\input{5-typechecker}
+\input{../Build/Post/Source/TypeTheory/Lambda/Typing/Error}
+\input{../Build/Post/Source/TypeTheory/Lambda/Typing/Checker}
+
+\section{Typing proofs}
+\input{../Build/Post/Source/TypeTheory/Lambda/Typing/CheckerProofs}
+
+\section{Substitution}
+\input{../Build/Post/Source/TypeTheory/Lambda/Core/TermSub}
+\input{../Build/Post/Source/TypeTheory/Lambda/Typing/CheckerSubProofs}
+
+\section{Single substitution}
+\input{../Build/Post/Source/TypeTheory/Lambda/Core/TermSingSub}
+\input{../Build/Post/Source/TypeTheory/Lambda/Typing/CheckerSingSubProofs}
+
+\section{Reduction}
+\input{../Build/Post/Source/TypeTheory/Lambda/Reduction/Beta}
+
+\section{Normal form}
+\input{../Build/Post/Source/TypeTheory/Lambda/Reduction/NormalForm}
+\input{../Build/Post/Source/TypeTheory/Lambda/Reduction/NormalFormProofs}
+\input{../Build/Post/Source/TypeTheory/Lambda/Reduction/Examples}
+
+
+\chapter{Interpretation}\label{ch:interpretation}
+\input{6-interpretation}
+\input{../Build/Post/Source/TypeTheory/Lambda/IParam}
+\input{../Build/Post/Source/TypeTheory/Lambda/Interpretation/Interpretation}
+
+\input{../Build/Post/Source/TypeTheory/Lambda/Interpretation/InterpretationProofsWeak}
+\input{../Build/Post/Source/TypeTheory/Lambda/Interpretation/InterpretationProofsBeta}
+
+\chapter{Discussion and further work}
+\input{7-conclusion}
+
+
+\bibliographystyle{plainnat}
+\bibliography{main}
+
+
+
+
+
+\cleardoublepage
+
+\include{Z-Declaration}
+
+\end{document}
